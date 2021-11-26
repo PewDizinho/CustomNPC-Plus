@@ -16,8 +16,6 @@ public abstract class EntityNPCFlying extends EntityNPCInterface {
 		super(world);
 	}
 
-	// FLY CHANGE  [WIP]
-
 	@Override
 	public boolean canFly(){
 		return ai.movementType == 1;

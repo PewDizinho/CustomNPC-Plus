@@ -30,7 +30,7 @@ public class SubGuiNpcMovement extends SubGuiInterface implements ITextfieldList
     	this.addButton(new GuiNpcButton(0, guiLeft + 80, y, 100, 20, EnumMovingType.names(), ai.movingType.ordinal()));
 
     	// Fly Change
-		// this.addButton(new GuiNpcButton(15, guiLeft + 80, y += 22, 100, 20, new String[]{"movement.ground","movement.flying"}, ai.movementType));
+		this.addButton(new GuiNpcButton(15, guiLeft + 80, y += 22, 100, 20, new String[]{"movement.ground","movement.flying"}, ai.movementType));
 
 		if(ai.movingType == EnumMovingType.Wandering){    
 			addTextField(new GuiNpcTextField(4,this, guiLeft + 100, y += 22, 40, 20, ai.walkingRange + ""));

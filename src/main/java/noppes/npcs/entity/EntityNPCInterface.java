@@ -1,5 +1,6 @@
 package noppes.npcs.entity;
 
+import cpw.mods.fml.common.ObfuscationReflectionHelper;
 import io.netty.buffer.ByteBuf;
 
 import java.io.IOException;
@@ -59,6 +60,8 @@ import noppes.npcs.ai.EntityAIMoveIndoors;
 import noppes.npcs.ai.EntityAIPanic;
 import noppes.npcs.ai.EntityAIWander;
 import noppes.npcs.ai.EntityAIWatchClosest;
+import noppes.npcs.ai.pathfinder.FlyingMoveHelper;
+import noppes.npcs.ai.pathfinder.PathNavigateFlying;
 import noppes.npcs.ai.selector.NPCAttackSelector;
 import noppes.npcs.ai.target.EntityAIClearTarget;
 import noppes.npcs.ai.target.EntityAIClosestTarget;
@@ -597,17 +600,21 @@ public abstract class EntityNPCInterface extends EntityCreature implements IEnti
         this.targetTasks.addTask(3, new EntityAIOwnerHurtByTarget(this));
         this.targetTasks.addTask(4, new EntityAIOwnerHurtTarget(this));
 
-        this.tasks.addTask(0, new EntityAIWaterNav(this));
+        // this.tasks.addTask(0, new EntityAIWaterNav(this));
 
-//		if(canFly()){
-//			this.moveHelper = new FlyingMoveHelper(this);
-//			this.navigator = new PathNavigateFlying(this, worldObj);
-//		}
-//		else{
-//			this.moveHelper = new EntityMoveHelper(this);
-//			this.navigator = new PathNavigateGround(this, worldObj);
-//			this.tasks.addTask(0, new EntityAIWaterNav(this));
-//		}
+		if(canFly()){
+			ObfuscationReflectionHelper.setPrivateValue(EntityLiving.class, this, new FlyingMoveHelper(this), "moveHelper");
+
+			// this.moveHelper = new FlyingMoveHelper(this);
+			this.navigator = new PathNavigateFlying(this, worldObj);
+		}
+		else{
+			ObfuscationReflectionHelper.setPrivateValue(EntityLiving.class, this, new EntityMoveHelper(this), "moveHelper");
+
+			// this.moveHelper = new EntityMoveHelper(this);
+			this.navigator = new PathNavigateGround(this, worldObj);
+			this.tasks.addTask(0, new EntityAIWaterNav(this));
+		}
 
 		this.taskCount = 1;
 		this.doorInteractType();
